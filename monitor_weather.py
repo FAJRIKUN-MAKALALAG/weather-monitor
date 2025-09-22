@@ -25,9 +25,9 @@ CITIES = [
 OPEN_METEO = "https://api.open-meteo.com/v1/forecast"
 
 # Timeout (connect, read) dalam detik
-TIMEOUT = (5, 60)   # connect 5s, read 60s
+TIMEOUT = (5, 90)   # connect 5s, read 60s
 # Jeda antar kota (detik) untuk menghindari burst / rate-limit
-PAUSE_BETWEEN_CITIES = 0.8
+PAUSE_BETWEEN_CITIES = 1.0
 # =================================================
 
 
