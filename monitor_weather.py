@@ -136,7 +136,7 @@ def main():
         print(f"Tutupan awan  : {tcc}%")
         print(f"Jarak pandang : {vs}")
 
-        summary = f"[{name}] : {tlocal} | {cond} | {temp}°C |\n RH {rh}% | Angin {ws} km/j dari {wd} | Awan {tcc}% | Vis {vs}\n"
+        summary = f"[{name}] : {tlocal} | {cond} | {temp}°C | RH {rh}% | Angin {ws} km/j dari {wd} | Awan {tcc}% | Vis {vs}\n\n"
         lines.append(summary)
 
         time.sleep(PAUSE_BETWEEN_CALLS)
