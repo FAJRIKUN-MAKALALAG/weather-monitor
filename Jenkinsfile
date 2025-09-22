@@ -54,14 +54,15 @@ stage('Notify Telegram') {
     ]) {
       sh '''
         set -e
-        # Tulis 30 baris terakhir report ke file (aman untuk newline & karakter spesial)
+        # Ambil 30 baris terakhir dan batasi panjang <= 3500 karakter (limit Telegram 4096)
         tail -n 30 reports/weather_report.txt > /tmp/tg_msg.txt
+        head -c 3500 /tmp/tg_msg.txt > /tmp/tg_msg_trimmed.txt
 
-        # Kirim ke Telegram (pakai file -> curl akan url-encode otomatis)
+        # Kirim sebagai teks polos (tanpa parse_mode) agar aman dari formatting error
         curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
           -d "chat_id=${CHAT_ID}" \
-          -d "parse_mode=Markdown" \
-          --data-urlencode "text@/tmp/tg_msg.txt" \
+          -d "disable_web_page_preview=true" \
+          --data-urlencode "text@/tmp/tg_msg_trimmed.txt" \
           -o /tmp/telegram_resp.json || true
 
         echo "Telegram response:"
@@ -70,6 +71,7 @@ stage('Notify Telegram') {
     }
   }
 }
+
 
 
     // --- Opsional: Email via Jenkins Mailer ---
