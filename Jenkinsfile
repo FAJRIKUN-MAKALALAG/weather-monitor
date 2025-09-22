@@ -46,19 +46,26 @@ pipeline {
     }
 
     // --- Opsional: kirim Telegram bila ENV tersedia ---
-    stage('Notify Telegram') {
+stage('Notify Telegram') {
   steps {
     withCredentials([
       string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'BOT_TOKEN'),
-      string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'CHAT_ID')
+      string(credentialsId: 'TELEGRAM_CHAT_ID',  variable: 'CHAT_ID')
     ]) {
       sh '''
         set -e
-        TEXT=$(tail -n 30 reports/weather_report.txt | sed "s/\"/'/g")
+        # Tulis 30 baris terakhir report ke file (aman untuk newline & karakter spesial)
+        tail -n 30 reports/weather_report.txt > /tmp/tg_msg.txt
+
+        # Kirim ke Telegram (pakai file -> curl akan url-encode otomatis)
         curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
-          -d chat_id="${CHAT_ID}" \
-          -d parse_mode="Markdown" \
-          --data-urlencode "text=${TEXT}" >/dev/null || true
+          -d "chat_id=${CHAT_ID}" \
+          -d "parse_mode=Markdown" \
+          --data-urlencode "text@/tmp/tg_msg.txt" \
+          -o /tmp/telegram_resp.json || true
+
+        echo "Telegram response:"
+        cat /tmp/telegram_resp.json || true
       '''
     }
   }
@@ -72,7 +79,7 @@ pipeline {
         emailext(
           subject: "Weather Report - ${env.JOB_NAME} #${env.BUILD_NUMBER}",
           to: "${env.EMAIL_TO}",
-          body: """<p>Ringkasan cuaca terbaru (lihat Console Output & artifact):</p>
+          body: """<p>Ringkasan cuaca terbaru - (lihat Console Output & artifact):</p>
                    <pre>${readFile('reports/weather_report.txt')}</pre>""",
           mimeType: 'text/html'
         )
