@@ -17,6 +17,7 @@ WIB = pytz.timezone("Asia/Jakarta")
 BMKG_LOCS: List[Dict[str, str]] = [
     {"name": "Kemayoran, Jakarta Pusat",     "adm4": "31.71.03.1001"},
     {"name": "Airmadidi, Manado, Sulut",     "adm4": "71.71.06.1008"},
+    {"name": "Setiabudi, Jakarta Selatan",   "adm4": "31.71.05.2004"},
     # Tambahkan lokasi lain di sini
 ]
 # ============================================
