@@ -136,21 +136,10 @@ def main():
         print(f"Tutupan awan  : {tcc}%")
         print(f"Jarak pandang : {vs}")
 
-        summary = (
-    f"[{name:<10}] "  # lebar kolom 10, rata kiri
-    f"{tlocal:<8} | "
-    f"{cond:<15} | "
-    f"{temp:>4}°C | "
-    f"RH {rh:>3}% | "
-    f"Angin {ws:>3} km/j dari {wd:<3} | "
-    f"Awan {tcc:>3}% | "
-    f"Vis {vs:>5}"
-    )
+        summary = f"[{name}] : {tlocal} | {cond} | {temp}°C |\n RH {rh}% | Angin {ws} km/j dari {wd} | Awan {tcc}% | Vis {vs}\n"
+        lines.append(summary)
 
-    lines.append(summary)
-
-
-    time.sleep(PAUSE_BETWEEN_CALLS)
+        time.sleep(PAUSE_BETWEEN_CALLS)
 
     # tulis ringkas untuk Jenkins artifact & notifikasi
     with open("reports/weather_report.txt", "w", encoding="utf-8") as f:
