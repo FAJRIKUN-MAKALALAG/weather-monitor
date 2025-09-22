@@ -14,11 +14,14 @@ WIB = pytz.timezone("Asia/Jakarta")
 # ========= KONFIGURASI LOKASI (ADM4) =========
 # Ganti/isi sesuai kebutuhanmu. Format:
 # {"name": "Nama Tampilan", "adm4": "kode_kelurahan_desa"}
-BMKG_LOCS: List[Dict[str, str]] = [
-    {"name": "Kemayoran, Jakarta Pusat",     "adm4": "31.71.03.1001"},
-    {"name": "Airmadidi, Sulut",     "adm4": "71.71.06.1008"},
-    # Tambahkan lokasi lain di sini
+BMKG_LOCS = [
+    {"name": "Kemayoran, Jakarta Pusat", "adm4": "31.71.03.1001"},
+    {"name": "Airmadidi Atas, Minut",    "adm4": "71.06.03.1008"},
+    {"name": "Airmadidi Bawah, Minut",   "adm4": "71.06.03.1005"},
+    {"name": "Manado - Sario Utara",     "adm4": "71.71.03.1006"},
+    {"name": "Bitung - Manembo Tengah",  "adm4": "71.72.03.1004"},
 ]
+
 # ============================================
 
 BMKG_ENDPOINT = "https://api.bmkg.go.id/publik/prakiraan-cuaca"
