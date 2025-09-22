@@ -46,19 +46,24 @@ pipeline {
     }
 
     // --- Opsional: kirim Telegram bila ENV tersedia ---
-    stage('Notify Telegram (optional)') {
-      when { expression { return env.TELEGRAM_BOT_TOKEN?.trim() && env.TELEGRAM_CHAT_ID?.trim() } }
-      steps {
-        sh '''
-          set -e
-          TEXT=$(tail -n 30 reports/weather_report.txt | sed "s/\"/'/g")
-          curl -s -X POST "https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage" \
-            -d chat_id="${TELEGRAM_CHAT_ID}" \
-            -d parse_mode="Markdown" \
-            --data-urlencode "text=${TEXT}" >/dev/null || true
-        '''
-      }
+    stage('Notify Telegram') {
+  steps {
+    withCredentials([
+      string(credentialsId: 'TELEGRAM_BOT_TOKEN', variable: 'BOT_TOKEN'),
+      string(credentialsId: 'TELEGRAM_CHAT_ID', variable: 'CHAT_ID')
+    ]) {
+      sh '''
+        set -e
+        TEXT=$(tail -n 30 reports/weather_report.txt | sed "s/\"/'/g")
+        curl -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage" \
+          -d chat_id="${CHAT_ID}" \
+          -d parse_mode="Markdown" \
+          --data-urlencode "text=${TEXT}" >/dev/null || true
+      '''
     }
+  }
+}
+
 
     // --- Opsional: Email via Jenkins Mailer ---
     stage('Email (optional)') {
